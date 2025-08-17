@@ -118,4 +118,31 @@ public class Solution5_5 {
         return resultList.stream().mapToInt(Integer::intValue).toArray(); // 어차피 scores에서 차례로 올라가므로 정렬 필요 없음
 
     }
+
+    //5. 배열 문제 5번
+    // 2차원 배열 arr1, arr2를 입력받아 arr1에 arr2를 곱한 결과를 반환하세요
+    // 조건1. 배열 행과 열의 길이는 2 이상 100 이하
+    // 조건2. 행렬의 데이터는 -10이상 20이하
+    public int[][] solution3(int[][] arr1, int[][] arr2) {
+        //1. 행렬 길이 ex. 3x2 2x3 ? >> 3x3
+        int rowNum = arr1.length;
+        int colNum = arr2[0].length;
+
+        int[][] result = new int[rowNum][colNum];
+
+
+        //2. 곱셈
+        for(int i = 0; i < rowNum; i++){
+
+            int[] arr1Row = arr1[i];
+            for(int j = 0; j < colNum; j++){
+
+                for(int k = 0; k < arr2.length; k++){
+                    result[i][j] += arr1Row[k] * arr2[k][j];
+                }
+            }
+        }
+
+        return result;
+    }
 }
