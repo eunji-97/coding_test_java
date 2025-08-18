@@ -145,4 +145,70 @@ public class Solution5_5 {
 
         return result;
     }
+
+    //5. 배열 문제 6번
+    // 실패율을 반환하세요 (스테이지에 도달했으나 아직 클리어하지 못한 플레이어 수 / 스테이지에 도달한 플레이어 수)
+    // 조건1. 스테이지 개수 N은 1~500
+    // 조건2. 스테이지의 길이는 1~200000
+    // 조건3. 스테이지에는 1 ~ N+1 의 자연수가 있음
+    // 조건4. 실패율이 높은 스테이지 부터 내림차순으로 번호가 담겨진 배열을 반환 (같은 실패율이면 작은 번호의 스테이지가 먼저 오게)
+    public int[] solution4(int N, int[] stages){
+
+//        // 실패율을 담을 배열
+//        int stagesCount = stages.length;
+//        Map<Integer, Double> failStagesMap = new HashMap<>();
+//
+//        stages = Arrays.stream(stages).sorted().toArray();
+//        for(int i = 1; i < N+1; i++){
+//            failStagesMap.put(i, 0.0);
+//        }
+//
+//        for (int stage : stages) {
+//            if(stage > N){
+//                continue;
+//            }
+//
+//            failStagesMap.put(stage, failStagesMap.get(stage) + 1);
+//        }
+//
+//
+//        for(Map.Entry<Integer, Double> failStage : failStagesMap.entrySet()){
+//
+//            int failCount = failStage.getValue().intValue();
+//            failStagesMap.put(failStage.getKey(), failStage.getValue() / stagesCount);
+//            stagesCount -= failCount;
+//        }
+//
+//        return failStagesMap.entrySet().stream().sorted((o1, o2) ->
+//                o1.getValue().equals(o2.getValue()) ? Integer.compare(o1.getKey(),
+//                        o2.getKey()) : Double.compare(o2.getValue(),
+//                        o1.getValue())).mapToInt(Map.Entry::getKey).toArray();
+
+        // 풀이
+        //1. 도전자 수 구하기
+        int[] challenger = new int[N+2]; //배열은 0부터 시작하므로 N+1까지 담기위한 전략
+        for(int stage : stages){
+            challenger[stage] += 1;
+        }
+
+        //2. 스테이지 별 실패한 사용자 수
+        HashMap<Integer, Double> fails = new HashMap<>();
+        double total = stages.length;
+
+        for(int i = 1; i <= N; i++){
+            if(challenger[i] == 0){
+                fails.put(i, 0.0);
+            }else {
+                fails.put(i, challenger[i] / total);
+                total -= challenger[i];
+            }
+        }
+
+        return fails.entrySet().stream().sorted((o1, o2) ->
+                o1.getValue().equals(o2.getValue()) ? Integer.compare(o1.getKey(),
+                        o2.getKey()) : Double.compare(o2.getValue(),
+                        o1.getValue())).mapToInt(Map.Entry::getKey).toArray();
+
+        //stages를 정렬하는것보다 카운팅 배열을 사용하는 편이 더 효율적임
+    }
 }
