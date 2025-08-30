@@ -217,4 +217,42 @@ public class Solution5_5 {
         //이러한 구조가 자바 17버전까지는 유효하기 때문에 여기서는 스테이지를 정렬하는 로직이 없는것!
         //정렬하는 로직이 있어도 시간복잡도에는 큰 영향이 없다.
     }
+
+    // 좌표에서 한번도 지나가지 않은 길을 지난 횟수 구하기 (좌표가 아니라!!)
+    // 조건 1. dirs는 'U', 'D', 'R', 'L'만 주어짐
+    // 조건 2. dirs의 길이는 500 이하의 자연수
+    // 조건 3. -5, 5를 벗어나면 무시
+    private static final HashMap<Character, int[]> location = new HashMap<>(); // 경로 기록용
+
+    public int solution5(String dirs){
+
+        HashMap<Character, int[]> location = new HashMap<>();
+
+        location.put('U', new int[]{0, 1});
+        location.put('D', new int[]{0, -1});
+        location.put('L', new int[]{-1, 0});
+        location.put('R', new int[]{1, 0});
+
+        int x = 0;
+        int y = 0;
+
+        Set<String> answer = new HashSet<>(); // 중복 막기
+
+        for(int i = 0; i < dirs.length(); i++){
+            int[] offset = location.get(dirs.charAt(i));
+            int horizontal = x + offset[0];
+            int vertical = y + offset[1];
+
+            if(horizontal < 6 && horizontal > -6 && vertical < 6 && vertical > -6){
+                answer.add(x + " " + y + " " + horizontal + " " + vertical);
+                answer.add(horizontal + " " + vertical + " " + x + " " + y); //길이기 때문에 반대 방향도 얻어야 함
+
+                x = horizontal;
+                y = vertical;
+            }
+        }
+
+        return answer.size() / 2; //양방향에서 단방향으로 계산하기
+
+    }
 }
